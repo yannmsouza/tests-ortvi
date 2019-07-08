@@ -5,7 +5,7 @@ import logger from '../core/logger';
 const APP = 'https://infra.akirymedia.com/test/login';
 const PROFILE = 'https://infra.akirymedia.com/test/profile';
 const UPLOAD = 'https://infra.akirymedia.com/test/profile/videos/upload';
-const INVITATIONS = 'https://infra.akirymedia.com/test/invitation-artist';
+// const INVITATIONS = 'https://infra.akirymedia.com/test/invitation-artist';
 let invalidString: string = 'aasdasdasdasdasdasdaadADAdADaADASDADADASSDADADADASDASDADASSDASSDA' +
   'SSDASDASDASDASDASDASDASADASSDASDASDASDASDASDASDASDASDASDASDASDASDASAAAAAAAAAAAAAAAA' +
   'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' +
@@ -465,6 +465,40 @@ describe('Test FN05 - Convidar de Artistas', () => {
       visible: true,
       timeout: 3 * 3000,
     });
+
+  }, 40 * 1000);
+});
+
+describe('Test FN07 - Executar um vídeo', () => {
+  beforeEach(async () => {
+    logger.info('CT01');
+    await page.reload();
+    await page.waitForSelector('form', {
+      visible: true,
+    });
+    await page.click('input[name=email]');
+    await page.type('input[name=email]', jane.email);
+    await page.click('input[name=password]');
+    await page.type('input[name=password]', jane.password);
+    const [button] = await page.$x('//button[contains(., \'LOGIN\')]');
+    if (button) {
+      await button.click();
+    }
+    await page.waitForSelector('app-home-page');
+
+  });
+
+  test('CT14 - Executar um vídeo', async () => {
+    logger.info('CT14');
+    await page.waitForSelector('app-video-item-showcase', {
+      visible: true,
+      timeout: 3 * 3000,
+    });
+    await page.click('app-video-item-showcase');
+
+    const idVideo = await page.$('#akiryPlayerId_html5_api');
+    console.log(idVideo);
+    expect(idVideo).toBe(!null);
 
   }, 40 * 1000);
 });
