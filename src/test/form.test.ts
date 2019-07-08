@@ -5,6 +5,7 @@ import logger from '../core/logger';
 const APP = 'https://infra.akirymedia.com/test/login';
 const PROFILE = 'https://infra.akirymedia.com/test/profile';
 const UPLOAD = 'https://infra.akirymedia.com/test/profile/videos/upload';
+const INVITATIONS = 'https://infra.akirymedia.com/test/invitation-artist';
 let invalidString: string = 'aasdasdasdasdasdasdaadADAdADaADASDADADASSDADADADASDASDADASSDASSDA' +
   'SSDASDASDASDASDASDASDASADASSDASDASDASDASDASDASDASDASDASDASDASDASDASAAAAAAAAAAAAAAAA' +
   'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' +
@@ -42,7 +43,7 @@ const height = 900;
 
 
 beforeAll(async () => {
-  jest.setTimeout(1000 * 1000);
+  jest.setTimeout(100 * 1000);
   browser = await puppeteer.launch({
     headless: false,
     slowMo: 10,
@@ -271,6 +272,7 @@ describe('Test FN03 - Edit Profile', () => {
     if (buttonSave) {
       await buttonSave.click();
     }
+
   }, 40 * 1000);
 });
 
@@ -332,4 +334,25 @@ describe('Test FN04 - Upload Video', () => {
 
   }, 40 * 1000);
 
+
+  test('CT10 - Upload Com Informações', async () => {
+    logger.info('CT09');
+    await page.waitForSelector('app-upload-video-art', {
+      visible: true,
+      timeout: 3 * 3000,
+    });
+    await page.$('div.form-upload-video');
+    await page.$x('//button[contains(., \'CHOOSE FILE\')]');
+    const input = await page.$('input[type="file"]');
+    await input.uploadFile('src/test/Flowers - 7924.mp4');
+    const inputTitle = await page.$('input[placeholder="Title"]');
+    await inputTitle.type('Ai desgraça');
+    await page.select('#categoryType', 'Video');
+    await page.select('#categoryType', '2016');
+    const [buttonReview] = await page.$x('//button[contains(., \'REVIEW\')]');
+    await buttonReview.click();
+    await page.waitForSelector('app-approve-work-art'); //APPROVE WORK
+
+  }, 40 * 1000);
+  
 });
