@@ -502,3 +502,57 @@ describe('Test FN07 - Executar um vídeo', () => {
 
   }, 40 * 1000);
 });
+
+
+describe('Test FN08 - Pesquisar um Vídeo', () => {
+  beforeAll(async () => {
+    logger.info('CT01');
+    await page.reload();
+    await page.waitForSelector('form', {
+      visible: true,
+    });
+    await page.click('input[name=email]');
+    await page.type('input[name=email]', jane.email);
+    await page.click('input[name=password]');
+    await page.type('input[name=password]', jane.password);
+    const [button] = await page.$x('//button[contains(., \'LOGIN\')]');
+    if (button) {
+      await button.click();
+    }
+    await page.waitForSelector('app-home-page', {
+      visible: true,
+      timeout: 3 * 3000,
+    });
+
+  });
+
+  test('CT15 - Pesquisar um Vídeo', async () => {
+    logger.info('CT15  ');
+
+    const divHeader = await page.$('div.boundary-header');
+    console.log(divHeader != null);
+    const search = await divHeader.$('header > div.col-xs-6.header-actions >' +
+      'div.radius-gray-background.clickable > button.button-search');
+    if (search) {
+      await search.click();
+    }
+
+    const inputSearch = await page.$('input[placeholder="SEARCH"]');
+    await inputSearch.type('A');
+
+    let vids = await page.$('app-screening-showcase', {
+      visible: true,
+      timeout: 3 * 3000,
+    });
+    if (!vids) {
+      vids = await page.$('div.no-videos-div', {
+        visible: true,
+        timeout: 3 * 3000,
+      });
+      let res = vids ? vids : undefined;
+      expect(res).toBeDefined();
+    }
+
+  }, 40 * 1000);
+
+});
