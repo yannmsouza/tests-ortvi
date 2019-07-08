@@ -11,6 +11,8 @@ let invalidString: string = 'aasdasdasdasdasdasdaadADAdADaADASDADADASSDADADADASD
   'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' +
   'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 
+let invalidEmail = 'login123.com';
+
 const lead = {
   name: faker.name.firstName(),
   email: faker.internet.email(),
@@ -151,7 +153,7 @@ describe('Test FN02 - Subscribe To Information', () => {
     await page.waitForSelector('.mat-card');
     const box = await page.$('div.box');
     const emailInput = await box.$('input[name="email"]');
-    await emailInput.type('login123.com');
+    await emailInput.type(invalidEmail);
     const [buttonSend] = await page.$x('//button[contains(., "SEND")]');
     if (buttonSend) {
       await buttonSend.click();
@@ -354,7 +356,7 @@ describe('Test FN04 - Upload Video', () => {
     await page.waitForSelector('app-approve-work-art'); //APPROVE WORK
 
   }, 40 * 1000);
-  
+
 });
 
 describe('Test FN06 - Listagem de Vídeos', () => {
@@ -385,6 +387,84 @@ describe('Test FN06 - Listagem de Vídeos', () => {
     await page.click('app-logo');
 
     await page.$('div.body-center');
+
+  }, 40 * 1000);
+});
+
+
+describe('Test FN05 - Convidar de Artistas', () => {
+  beforeAll(async () => {
+    logger.info('CT01');
+    await page.reload();
+    await page.waitForSelector('form', {
+      visible: true,
+    });
+    await page.click('input[name=email]');
+    await page.type('input[name=email]', jane.email);
+    await page.click('input[name=password]');
+    await page.type('input[name=password]', jane.password);
+    const [button] = await page.$x('//button[contains(., \'LOGIN\')]');
+    if (button) {
+      await button.click();
+    }
+    await page.waitForSelector('app-home-page');
+
+  });
+  beforeEach(async () => {
+    await page.goto(INVITATIONS, {
+      timeout: 5 * 30000,
+      waitUntil: 'domcontentloaded',
+    });
+  });
+
+  test('CT11 - Convidar de Artista Entradas Válidas', async () => {
+    logger.info('CT11  ');
+    await page.waitForSelector('div.box-title', {
+      visible: true,
+      timeout: 3 * 3000,
+    });
+
+    const inputName = await page.$('input[placeholder="Name"]');
+    await inputName.type(invalidString);
+
+    const inputEmail = await page.$('input[placeholder="Email"]');
+    await inputEmail.type();
+
+    const [button] = await page.$x('//button[contains(., \'SEND\')]');
+    if (button) {
+      await button.click();
+    }
+
+    await page.waitForSelector('.alert-body', {
+      visible: true,
+      timeout: 3 * 3000,
+    });
+
+  }, 40 * 1000);
+
+
+  test('CT12 - Convidar de Artista Entradas Inválidas', async () => {
+    logger.info('CT12  ');
+    await page.waitForSelector('div.box-title', {
+      visible: true,
+      timeout: 3 * 3000,
+    });
+
+    const inputName = await page.$('input[placeholder="Name"]');
+    await inputName.type(invalidString);
+
+    const inputEmail = await page.$('input[placeholder="Email"]');
+    await inputEmail.type(invalidEmail);
+
+    const [button] = await page.$x('//button[contains(., \'SEND\')]');
+    if (button) {
+      await button.click();
+    }
+
+    await page.waitForSelector('.alert-body', {
+      visible: true,
+      timeout: 3 * 3000,
+    });
 
   }, 40 * 1000);
 });
