@@ -1,5 +1,4 @@
 import { Connection, createConnection, getConnectionManager } from 'typeorm';
-import { Book } from './domains/book/book';
 
 export const connection = async (): Promise<void | Connection> => {
   const manager = await getConnectionManager();
@@ -15,7 +14,6 @@ export const connection = async (): Promise<void | Connection> => {
       database: 'integracao',
       schema: 'testes',
       synchronize: true,
-      entities: [Book]
     });
   }
 };

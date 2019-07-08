@@ -5,7 +5,7 @@ import logger from '../core/logger';
 const APP = 'https://infra.akirymedia.com/test/login';
 const PROFILE = 'https://infra.akirymedia.com/test/profile';
 const UPLOAD = 'https://infra.akirymedia.com/test/profile/videos/upload';
-// const INVITATIONS = 'https://infra.akirymedia.com/test/invitation-artist';
+const INVITATIONS = 'https://infra.akirymedia.com/test/invitation-artist';
 let invalidString: string = 'aasdasdasdasdasdasdaadADAdADaADASDADADASSDADADADASDASDADASSDASSDA' +
   'SSDASDASDASDASDASDASDASADASSDASDASDASDASDASDASDASDASDASDASDASDASDASAAAAAAAAAAAAAAAA' +
   'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' +
