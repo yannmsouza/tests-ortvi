@@ -356,3 +356,35 @@ describe('Test FN04 - Upload Video', () => {
   }, 40 * 1000);
   
 });
+
+describe('Test FN06 - Listagem de Vídeos', () => {
+  beforeEach(async () => {
+    logger.info('CT01');
+    await page.reload();
+    await page.waitForSelector('form', {
+      visible: true,
+    });
+    await page.click('input[name=email]');
+    await page.type('input[name=email]', jane.email);
+    await page.click('input[name=password]');
+    await page.type('input[name=password]', jane.password);
+    const [button] = await page.$x('//button[contains(., \'LOGIN\')]');
+    if (button) {
+      await button.click();
+    }
+    await page.waitForSelector('app-home-page');
+
+  });
+
+  test('CT13 - Listagem de Vídeos', async () => {
+    logger.info('CT13');
+    await page.waitForSelector('app-logo', {
+      visible: true,
+      timeout: 3 * 3000,
+    });
+    await page.click('app-logo');
+
+    await page.$('div.body-center');
+
+  }, 40 * 1000);
+});
